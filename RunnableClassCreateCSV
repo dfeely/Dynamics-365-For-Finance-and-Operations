@@ -1,0 +1,36 @@
+class RunnableClassCreateCSV
+{        
+    /// <summary>
+    /// Runs the class with the specified arguments.
+    /// </summary>
+    /// <param name = "_args">The specified arguments.</param>
+    public static void main(Args _args)
+    {   
+        System.IO.Stream        stream;
+        TextStreamIo            io;
+        System.IO.StreamReader  reader;
+        XML                     fileContent;
+
+        io = TextStreamIo::constructForWrite();
+        io.write("AccountNum,CustomerName,Currency,Customer Group");
+
+        CustTable custTable;
+        //Assume that you are running in company 'DAT'.
+        changeCompany('USRT') //Default company is now 'USRT'
+        {
+            custTable = null;
+            while select custTable
+            {
+                io.write(strFmt("%1,%2,%3,%4",custTable.AccountNum,custTable.name(),custTable.Currency,custTable.CustGroup));
+            }
+        }
+
+        stream = io.getStream();
+        stream.Position = 0;
+        reader = new System.IO.StreamReader(stream);
+        filecontent = reader.ReadToEnd();
+
+        //save file on local folder via the browser
+        File::SendStringAsFileToUser(fileContent, 'MyCSVFile.csv');
+    }
+}
